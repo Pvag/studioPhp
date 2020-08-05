@@ -5,7 +5,7 @@ cpus: 1
 provider: virtualbox
 
 folders:
-    - map: .
+    - map: /Users/pvag/Coding/Web/Learning_PHP/Hello_PHP_Vagrant
       to: /home/vagrant/Code
 
 sites:
