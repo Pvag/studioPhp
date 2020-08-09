@@ -1,4 +1,7 @@
-# Homestead Improved
+# Learning php and MySql
 
-A fork of the original Laravel Homestead, this improved version aims to make things even simpler.
-See full explanation with quickstart tutorial [here](http://www.sitepoint.com/quick-tip-get-homestead-vagrant-vm-running/).
+Hi,
+
+I am learning php and MySQL! I am using this book: [PHP & MySQL: Novice to Ninja, 6th Edition](https://www.sitepoint.com/premium/books/php-mysql-novice-to-ninja-6th-edition/read/1), by Tom Butler, Kevin Yank.
+
+Sharing this code with anyone who would enjoy helping me out to become a better dev! I am also always open to study friends!
