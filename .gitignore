@@ -1,2 +1,4 @@
 /vendor
 /.vagrant
+Project/public/.vagrant/machines/default/virtualbox/vagrant_cwd
+Project/public/.vagrant/rgloader/loader.rb
