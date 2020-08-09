@@ -6,8 +6,7 @@ try {
     $pdo = new PDO('mysql:host=localhost;dbname=ijdb;charset=utf8', 'pvag', 'asDeup');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // $sql = 'SELECT `joketext` FROM `ijdb`.`joke`';
-    $sql = 'SELECT `joketext` FROM `ijdb`.`joke`';
+    $sql = 'SELECT `id`, `joketext` FROM `ijdb`.`joke`';
     $result = $pdo->query($sql);
 
     ob_start();
