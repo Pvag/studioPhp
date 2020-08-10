@@ -1,3 +1,4 @@
+<p>The ijdb currently has <?= $jokesCount ?> jokes!</p>
 <?php foreach ($result as $joke) : ?>
     <blockquote>
         <p style="display:inline">
