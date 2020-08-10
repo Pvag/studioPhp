@@ -1,4 +1,5 @@
 <p>The ijdb currently has <?= $jokesCount ?> jokes!</p>
+<!-- <p>TEST della funzione 'getJoke()' - joke 5: <?= getJoke($pdo, 5)['joketext'] ?></p> -->
 <?php foreach ($result as $joke) : ?>
     <blockquote>
         <p style="display:inline">
