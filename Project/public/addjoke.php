@@ -2,8 +2,7 @@
 $title = 'Add Joke';
 if (isset($_POST['joketext'])) {
     try {
-        $pdo = new PDO('mysql:host=localhost;dbname=ijdb;charset=utf8', 'pvag', 'asDeup');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        include __DIR__ . '/../includes/DatabaseConnection.php';
 
         $sql = 'INSERT INTO `joke` (`joketext`, `jokedate`) VALUES (:joketext, CURDATE())';
         $stmt = $pdo->prepare($sql);

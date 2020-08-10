@@ -1,8 +1,7 @@
 <?php
 if (isset($_POST['id'])) {
     try {
-        $pdo = new PDO('mysql:host=localhost;dbname=ijdb;charset=utf8', 'pvag', 'asDeup');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        include __DIR__ . '/../includes/DatabaseConnection.php';
 
         $sql = 'DELETE FROM `ijdb`.`joke` WHERE `id` = :id';
         $stmt = $pdo->prepare($sql);
