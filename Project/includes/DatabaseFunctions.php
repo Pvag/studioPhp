@@ -19,9 +19,6 @@ function getJoke($pdo, $id)
 function query($pdo, $sql, $parameters = [])
 {
     $query = $pdo->prepare($sql);
-    foreach ($parameters as $key => $value) {
-        $query->bindValue($key, $value);
-    }
-    $query->execute();
+    $query->execute($parameters);
     return $query;
 }
