@@ -48,3 +48,11 @@ function deleteJoke($pdo, $id)
     $parameters = [':id' => $id];
     query($pdo, $sql, $parameters);
 }
+
+function allJokes($pdo)
+{
+    $sql = 'SELECT `joke`.`id`, `joketext`, `name`, `email`
+                FROM `ijdb`.`joke` INNER JOIN `ijdb`.`author` ON `joke`.`authorid` = `author`.`id`';
+    $result = query($pdo, $sql);
+    return $result->fetchAll();
+}

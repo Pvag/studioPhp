@@ -6,9 +6,7 @@ try {
     include __DIR__ . '/../includes/DatabaseConnection.php';
     include __DIR__ . '/../includes/DatabaseFunctions.php';
 
-    $sql = 'SELECT `joke`.`id`, `joketext`, `name`, `email`
-                FROM `ijdb`.`joke` INNER JOIN `ijdb`.`author` ON `joke`.`authorid` = `author`.`id`';
-    $result = $pdo->query($sql);
+    $jokes = allJokes($pdo);
 
     $jokesCount = totalJokes($pdo); // used inside jokes.html.php
     ob_start();

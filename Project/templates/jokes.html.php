@@ -1,5 +1,5 @@
 <p>The ijdb currently has <?= $jokesCount ?> jokes!</p>
-<?php foreach ($result as $joke) : ?>
+<?php foreach ($jokes as $joke) : ?>
     <blockquote>
         <p style="display:inline">
             <?= htmlspecialchars($joke['joketext'], ENT_QUOTES, 'UTF-8'); ?>, by
