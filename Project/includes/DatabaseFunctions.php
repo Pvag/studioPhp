@@ -41,3 +41,10 @@ function editJoke($pdo, $id, $text, $authorid)
     $parameters = [':text' => $text, ':authorid' => $authorid, ':id' => $id];
     query($pdo, $sql, $parameters);
 }
+
+function deleteJoke($pdo, $id)
+{
+    $sql = 'DELETE FROM `joke` WHERE `id` = :id';
+    $parameters = [':id' => $id];
+    query($pdo, $sql, $parameters);
+}
