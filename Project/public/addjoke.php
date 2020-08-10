@@ -5,8 +5,16 @@ if (isset($_POST['joketext'])) {
         include __DIR__ . '/../includes/DatabaseConnection.php';
         include __DIR__ . '/../includes/DatabaseFunctions.php';
 
-        $author = '1'; // fixed, for now
-        insertJoke($pdo, $_POST['joketext'], $author);
+        $authorid = '1'; // fixed, for now
+        // passing in an associative array, with variable number of args. - also formats dates, if any is passed
+        insertJoke(
+            $pdo,
+            [
+                'joketext' => $_POST['joketext'],
+                'authorid' => $authorid,
+                'jokedate' => new DateTime()
+            ]
+        );
 
         header('location: jokes.php');
     } catch (PDOException $e) {

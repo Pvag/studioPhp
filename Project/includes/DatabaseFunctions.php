@@ -23,23 +23,51 @@ function query($pdo, $sql, $parameters = [])
     return $query;
 }
 
-function insertJoke($pdo, $text, $author)
+function formatDates($fields)
 {
-    $sql = 'INSERT INTO `joke` (`joketext`, `jokedate`, `authorid`) VALUES (:joketext, CURDATE(), ' . $author . ')';
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':joketext', $text);
-    $stmt->execute();
+    foreach ($fields as $key => $value) {
+        if ($value instanceof DateTime) {
+            $fields[$key] = $value->format('Y-m-d');
+        }
+    }
+    return $fields;
 }
 
-function editJoke($pdo, $id, $text, $authorid)
+// example call:
+// insertJoke($pdo, [authorid => 5, joketext='blablabla', 'jokedate' = new DateTime()]);
+function insertJoke($pdo, $fields)
 {
-    $sql = 'UPDATE `joke`
-            SET
-                `joketext` = :text,
-                `authorid` = :authorid
-            WHERE `id` = :id';
-    $parameters = [':text' => $text, ':authorid' => $authorid, ':id' => $id];
-    query($pdo, $sql, $parameters);
+    $sql = 'INSERT INTO `joke` (';
+    foreach ($fields as $key => $value) {
+        $sql .= '`' . $key . '`,';
+    }
+    $sql = rtrim($sql, ',');
+    $sql .= ') VALUES (';
+    foreach ($fields as $key => $value) {
+        $sql .= ':' . $key . ',';
+    }
+    $sql = rtrim($sql, ',');
+    $sql .= ')';
+
+    // this function does not require a specific format for the date passed as argument, but MySQL does!
+    $fields = formatDates($fields);
+
+    query($pdo, $sql, $fields);
+}
+
+function updateJoke($pdo, $fields)
+{
+    $sql = 'UPDATE `joke` SET ';
+    foreach ($fields as $key => $value) {
+        $sql .= $key . '=' . ':' . $key . ','; // *
+    }
+    $sql = rtrim($sql, ',');
+    $sql .= ' WHERE `id` = :primarykey'; // ':id' has been already used ! *
+    $fields['primarykey'] = $fields['id']; // *
+
+    $fields = formatDates($fields);
+
+    query($pdo, $sql, $fields);
 }
 
 function deleteJoke($pdo, $id)

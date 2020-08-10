@@ -5,7 +5,14 @@ try {
     include __DIR__ . '/../includes/DatabaseConnection.php';
     if (isset($_POST['joketext'])) {
         $authorID = 1; // TODO hard coded, for now
-        editJoke($pdo, $_POST['id'], $_POST['joketext'], $authorID);
+        updateJoke(
+            $pdo,
+            [
+                'id' => $_POST['id'],
+                'joketext' => $_POST['joketext'],
+                'authorid' => $authorID
+            ]
+        );
 
         header('location: jokes.php');
     } else {
