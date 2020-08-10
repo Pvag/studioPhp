@@ -3,12 +3,10 @@ $title = 'Add Joke';
 if (isset($_POST['joketext'])) {
     try {
         include __DIR__ . '/../includes/DatabaseConnection.php';
+        include __DIR__ . '/../includes/DatabaseFunctions.php';
 
         $author = '1'; // fixed, for now
-        $sql = 'INSERT INTO `joke` (`joketext`, `jokedate`, `authorid`) VALUES (:joketext, CURDATE(), ' . $author . ')';
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':joketext', $_POST['joketext']);
-        $stmt->execute();
+        insertJoke($pdo, $_POST['joketext'], $author);
 
         header('location: jokes.php');
     } catch (PDOException $e) {

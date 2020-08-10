@@ -22,3 +22,22 @@ function query($pdo, $sql, $parameters = [])
     $query->execute($parameters);
     return $query;
 }
+
+function insertJoke($pdo, $text, $author)
+{
+    $sql = 'INSERT INTO `joke` (`joketext`, `jokedate`, `authorid`) VALUES (:joketext, CURDATE(), ' . $author . ')';
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':joketext', $text);
+    $stmt->execute();
+}
+
+function editJoke($pdo, $id, $text, $authorid)
+{
+    $sql = 'UPDATE `joke`
+            SET
+                `joketext` = :text,
+                `authorid` = :authorid
+            WHERE `id` = :id';
+    $parameters = [':text' => $text, ':authorid' => $authorid, ':id' => $id];
+    query($pdo, $sql, $parameters);
+}
