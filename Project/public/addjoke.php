@@ -5,7 +5,8 @@ if (isset($_POST['joketext'])) {
         $pdo = new PDO('mysql:host=localhost;dbname=ijdb;charset=utf8', 'pvag', 'asDeup');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $sql = 'INSERT INTO `joke` (`joketext`, `jokedate`) VALUES (:joketext, CURDATE())';
+        $author = '1'; // fixed, for now
+        $sql = 'INSERT INTO `joke` (`joketext`, `jokedate`, `authorid`) VALUES (:joketext, CURDATE(), ' . $author . ')';
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':joketext', $_POST['joketext']);
         $stmt->execute();
