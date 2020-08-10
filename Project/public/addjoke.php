@@ -4,7 +4,8 @@ if (isset($_POST['joketext'])) {
     try {
         include __DIR__ . '/../includes/DatabaseConnection.php';
 
-        $sql = 'INSERT INTO `joke` (`joketext`, `jokedate`) VALUES (:joketext, CURDATE())';
+        $author = '1'; // fixed, for now
+        $sql = 'INSERT INTO `joke` (`joketext`, `jokedate`, `authorid`) VALUES (:joketext, CURDATE(), ' . $author . ')';
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':joketext', $_POST['joketext']);
         $stmt->execute();
