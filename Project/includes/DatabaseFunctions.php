@@ -28,8 +28,11 @@ function findAll($pdo, $table)
 }
 
 // replaces both 'deleteJoke' and 'deleteAuthor'
-function delete()
+function delete($pdo, $table, $primaryKey, $id)
 {
+    $sql = 'DELETE FROM ' . $table . ' WHERE ' . $primaryKey . ' = ' . ':primaryKey';
+    $params = ['primaryKey' => $id];
+    query($pdo, $sql, $params);
 }
 
 // replaces both 'insertJoke' and 'insertAuthor'
@@ -40,8 +43,9 @@ function insert()
 // replaces 'getJoke'
 function findById($pdo, $table, $primaryKey, $id)
 {
-    $sql = 'SELECT * FROM ' . $table . ' WHERE ' . $primaryKey . ' = ' . $id;
-    $result = query($pdo, $sql);
+    $sql = 'SELECT * FROM ' . $table . ' WHERE ' . $primaryKey . ' = :primaryKey';
+    $params = ['primaryKey' => $id];
+    $result = query($pdo, $sql, $params);
     return $result->fetch(PDO::FETCH_ASSOC);
 }
 
