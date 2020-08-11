@@ -84,3 +84,10 @@ function allJokes($pdo)
     $result = query($pdo, $sql);
     return $result->fetchAll();
 }
+
+function allAuthors($pdo)
+{
+    $sql = 'SELECT * FROM `author`';
+    $query = query($pdo, $sql);
+    return $query->fetchAll(PDO::FETCH_ASSOC); // if param is not provided in fetchAll, I get a text key and a numeric key for each column of each element that was fetched
+}
