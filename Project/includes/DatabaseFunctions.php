@@ -9,6 +9,20 @@ function query($pdo, $sql, $parameters = [])
     return $query;
 }
 
+function save($pdo, $table, $primaryKey, $params)
+{
+    try {
+        if ($params[$primaryKey] == '') {
+            $params[$primaryKey] = null; // take advantage of mysql's auto increment for the new primary key
+        }
+        // if the value provided for the primary key inside $params already exists in the db,
+        // the code in the 'catch' block is executed, performing an update of an existing value
+        insert($pdo, $table, $params);
+    } catch (PDOException $e) {
+        update($pdo, $table, $primaryKey, $params);
+    }
+}
+
 function processDates($fields)
 {
     foreach ($fields as $key => $value) {
