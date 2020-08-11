@@ -5,9 +5,10 @@ try {
     include __DIR__ . '/../includes/DatabaseFunctions.php';
 
     // function to be tested
-    $data = allAuthors($pdo);
+    // $data = allAuthors($pdo);
+    // $first = $data[0];
+    $first = findById($pdo, 'author', 'id', 1);
 
-    $first = $data[0];
     ob_start();
     include __DIR__ . '/../templates/test.html.php';
     $output = ob_get_clean();

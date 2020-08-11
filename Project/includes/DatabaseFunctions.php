@@ -1,5 +1,68 @@
 <?php
 
+// ----------- generic functions -----------
+
+function query($pdo, $sql, $parameters = [])
+{
+    $query = $pdo->prepare($sql);
+    $query->execute($parameters);
+    return $query;
+}
+
+function processDates($fields)
+{
+    foreach ($fields as $key => $value) {
+        if ($value instanceof DateTime) {
+            $fields[$key] = $value->format('Y-m-d');
+        }
+    }
+    return $fields;
+}
+
+// replaces both 'allJokes' and 'allAuthors'
+function findAll($pdo, $table)
+{
+    $sql = 'SELECT * FROM ' . $table;
+    $result = query($pdo, $sql);
+    return $result->fetchAll();
+}
+
+// replaces both 'deleteJoke' and 'deleteAuthor'
+function delete()
+{
+}
+
+// replaces both 'insertJoke' and 'insertAuthor'
+function insert()
+{
+}
+
+// replaces 'getJoke'
+function findById($pdo, $table, $primaryKey, $id)
+{
+    $sql = 'SELECT * FROM ' . $table . ' WHERE ' . $primaryKey . ' = ' . $id;
+    $result = query($pdo, $sql);
+    return $result->fetch(PDO::FETCH_ASSOC);
+}
+
+// replaces 'updateJoke'
+function update()
+{
+}
+
+// replaces 'totalJokes'
+function total($pdo, $table)
+{
+    $sql = 'SELECT COUNT(*) FROM ' . $table;
+    $result = query($pdo, $sql);
+    return $result->fetch()[0];
+}
+
+// ----------- end of generic functions -----------
+
+
+// ----------- specialized functions (i.e. that are specific to the example at hand - the Internet Jokes Database ) -----------
+
 function totalJokes($pdo)
 {
     $sql = 'SELECT COUNT(*) FROM `joke`';
@@ -14,23 +77,6 @@ function getJoke($pdo, $id)
     $query = query($pdo, $sql, $parameters);
     $row = $query->fetch();
     return $row;
-}
-
-function query($pdo, $sql, $parameters = [])
-{
-    $query = $pdo->prepare($sql);
-    $query->execute($parameters);
-    return $query;
-}
-
-function formatDates($fields)
-{
-    foreach ($fields as $key => $value) {
-        if ($value instanceof DateTime) {
-            $fields[$key] = $value->format('Y-m-d');
-        }
-    }
-    return $fields;
 }
 
 // example call:
@@ -50,7 +96,7 @@ function insertJoke($pdo, $fields)
     $sql .= ')';
 
     // this function does not require a specific format for the date passed as argument, but MySQL does!
-    $fields = formatDates($fields);
+    $fields = processDates($fields);
 
     query($pdo, $sql, $fields);
 }
@@ -65,7 +111,7 @@ function updateJoke($pdo, $fields)
     $sql .= ' WHERE `id` = :primarykey'; // ':id' has been already used ! *
     $fields['primarykey'] = $fields['id']; // *
 
-    $fields = formatDates($fields);
+    $fields = processDates($fields);
 
     query($pdo, $sql, $fields);
 }
@@ -85,9 +131,31 @@ function allJokes($pdo)
     return $result->fetchAll();
 }
 
+// functions that work on the author db
+
 function allAuthors($pdo)
 {
     $sql = 'SELECT * FROM `author`';
     $query = query($pdo, $sql);
     return $query->fetchAll(PDO::FETCH_ASSOC); // if param is not provided in fetchAll, I get a text key and a numeric key for each column of each element that was fetched
 }
+
+function deleteAuthor($pdo, $id)
+{
+    $params = ['id' => $id];
+    $sql = 'DELETE FROM `author` WHERE `id` = :id';
+    query($pdo, $sql, $params);
+}
+
+function insertAuthor($pdo, $params)
+{
+    $sql = 'INSERT INTO `author` SET ';
+    foreach ($params as $key => $value) {
+        $sql .= $key . ' = :' . $key;
+    }
+    $params = processDates($params);
+    query($pdo, $sql, $params);
+}
+
+
+// ----------- end of specialized functions -----------

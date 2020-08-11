@@ -6,9 +6,26 @@ try {
     include __DIR__ . '/../includes/DatabaseConnection.php';
     include __DIR__ . '/../includes/DatabaseFunctions.php';
 
-    $jokes = allJokes($pdo);
+    //// same result in $jokes
+    ////
+    // $jokes = allJokes($pdo); // 1 db access
+    ////
+    // N+1 db accesses (N = number of jokes in db)
+    $jokesOnly = findAll($pdo, 'joke'); // 1 db access
+    foreach ($jokesOnly as $joke) {
+        $author = findById($pdo, 'author', 'id', $joke['authorid']); // N db accesses
+        $jokeComplete =
+            [
+                'id' => $joke['id'],
+                'joketext' => $joke['joketext'],
+                'jokedate' => $joke['jokedate'],
+                'name' => $author['name'],
+                'email' => $author['email']
+            ];
+        $jokes[] = $jokeComplete;
+    }
 
-    $jokesCount = totalJokes($pdo); // used inside jokes.html.php
+    $jokesCount = total($pdo, 'joke');
     ob_start();
     include __DIR__ . '/../templates/jokes.html.php';
     $output = ob_get_clean();
