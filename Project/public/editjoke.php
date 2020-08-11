@@ -15,7 +15,7 @@ try {
     } else {
         $title = 'Edit the joke';
         $id = $_GET['id'];
-        $joketext = getJoke($pdo, $id)['joketext'];
+        $joketext = findById($pdo, 'joke', 'id', $id)['joketext'];
         ob_start();
         include __DIR__ . '/../templates/editjoke.html.php';
         $output = ob_get_clean();
