@@ -57,8 +57,17 @@ function findById($pdo, $table, $primaryKey, $id)
 }
 
 // replaces 'updateJoke'
-function update()
+function update($pdo, $table, $primaryKey, $params)
 {
+    $sql = 'UPDATE ' . $table . ' SET ';
+    foreach ($params as $key => $value) {
+        $sql .= $key . '=:' . $key . ',';
+    }
+    $sql = rtrim($sql, ',');
+    $sql .= ' WHERE ' . $primaryKey . ' = :primarykey';
+    $params['primarykey'] = $params[$primaryKey];
+    $params = processDates($params);
+    query($pdo, $sql, $params);
 }
 
 // replaces 'totalJokes'
