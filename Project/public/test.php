@@ -7,7 +7,8 @@ try {
     // function to be tested
     // $data = allAuthors($pdo);
     // $first = $data[0];
-    $first = findById($pdo, 'author', 'id', 1);
+    // $first = findById($pdo, 'author', 'id', 1);
+    $first = processDates(['name' => 'Menirlo', 'data' => new DateTime()]);
 
     ob_start();
     include __DIR__ . '/../templates/test.html.php';

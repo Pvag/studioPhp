@@ -36,8 +36,15 @@ function delete($pdo, $table, $primaryKey, $id)
 }
 
 // replaces both 'insertJoke' and 'insertAuthor'
-function insert()
+function insert($pdo, $table, $params)
 {
+    $sql = 'INSERT INTO ' . $table . ' SET ';
+    foreach ($params as $key => $value) {
+        $sql .= $key . ' = :' . $key . ',';
+    }
+    $sql = rtrim($sql, ',');
+    $params = processDates($params);
+    query($pdo, $sql, $params);
 }
 
 // replaces 'getJoke'
