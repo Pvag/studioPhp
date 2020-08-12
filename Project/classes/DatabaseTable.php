@@ -39,9 +39,9 @@ class DatabaseTable
             }
             // if the value provided for the primary key inside $params already exists in the db,
             // the code in the 'catch' block is executed, performing an update of an existing value
-            $this->insert($this->pdo, $this->table, $params);
+            $this->insert($params);
         } catch (PDOException $e) {
-            $this->update($this->pdo, $this->table, $primaryKey, $params);
+            $this->update($params);
         }
     }
 

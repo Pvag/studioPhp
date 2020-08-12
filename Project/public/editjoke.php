@@ -1,8 +1,10 @@
 <?php
 
 try {
-    include __DIR__ . '/../includes/DatabaseFunctions.php';
     include __DIR__ . '/../includes/DatabaseConnection.php';
+    include __DIR__ . '/../classes/DatabaseTable.php';
+
+    $jokeTable = new DatabaseTable($pdo, 'joke', 'id');
     if (isset($_POST['joke'])) {
         $authorID = 1; // TODO hard coded, for now
         // save is generic, it would still work on table 'book', with pk 'isbn';
@@ -10,13 +12,13 @@ try {
         $joke = $_POST['joke'];
         $joke['authorid'] = $authorID;
         $joke['jokedate'] = new DateTime();
-        save($pdo, 'joke', 'id', $joke);
+        $jokeTable->save($joke);
 
         header('location: jokes.php');
     } else {
         $title = 'Text of the joke';
         $id = $_GET['id'] ?? ''; // is '' if user is in 'Add Joke' page
-        $joketext = findById($pdo, 'joke', 'id', $id)['joketext']; // is 'null' if user is in 'Add Joke' page
+        $joketext = $jokeTable->findById($id)['joketext']; // is 'null' if user is in 'Add Joke' page
         ob_start();
         include __DIR__ . '/../templates/editjoke.html.php';
         $output = ob_get_clean();
