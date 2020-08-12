@@ -7,6 +7,7 @@ try {
     include __DIR__ . '/../classes/DatabaseTable.php';
 
     $jokesTable = new DatabaseTable($pdo, 'joke', 'id');
+    $authorsTable = new DatabaseTable($pdo, 'author', 'id');
     //// same result in $jokes
     ////
     // $jokes = allJokes($pdo); // 1 db access
@@ -14,7 +15,7 @@ try {
     // N+1 db accesses (N = number of jokes in db)
     $jokesOnly = $jokesTable->findAll(); // 1 db access
     foreach ($jokesOnly as $joke) {
-        $author = $jokesTable->findById($joke['authorid']); // N db accesses
+        $author = $authorsTable->findById($joke['authorid']); // N db accesses // TODO FIX AUTHOR TABLE!!
         $joke['name'] = $author['name'];
         $joke['email'] = $author['email'];
         $jokes[] = $joke;
