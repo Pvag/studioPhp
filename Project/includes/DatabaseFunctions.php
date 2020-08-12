@@ -33,7 +33,7 @@ function processDates($fields)
     return $fields;
 }
 
-// replaces both 'allJokes' and 'allAuthors'
+// replaces both 'allJokes' and 'allAuthors' functions
 function findAll($pdo, $table)
 {
     $sql = 'SELECT * FROM ' . $table;
