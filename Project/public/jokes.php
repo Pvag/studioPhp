@@ -14,15 +14,9 @@ try {
     $jokesOnly = findAll($pdo, 'joke'); // 1 db access
     foreach ($jokesOnly as $joke) {
         $author = findById($pdo, 'author', 'id', $joke['authorid']); // N db accesses
-        $jokeComplete =
-            [
-                'id' => $joke['id'],
-                'joketext' => $joke['joketext'],
-                'jokedate' => $joke['jokedate'],
-                'name' => $author['name'],
-                'email' => $author['email']
-            ];
-        $jokes[] = $jokeComplete;
+        $joke['name'] = $author['name'];
+        $joke['email'] = $author['email'];
+        $jokes[] = $joke;
     }
 
     $jokesCount = total($pdo, 'joke');
