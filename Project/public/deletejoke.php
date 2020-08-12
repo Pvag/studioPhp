@@ -2,9 +2,10 @@
 if (isset($_POST['id'])) {
     try {
         include __DIR__ . '/../includes/DatabaseConnection.php';
-        include __DIR__ . '/../includes/DatabaseFunctions.php';
+        include __DIR__ . '/../classes/DatabaseTable.php';
 
-        delete($pdo, 'joke', 'id', $_POST['id']);
+        $jokesTable = new DatabaseTable($pdo, 'joke', 'id');
+        $jokesTable->delete($_POST['id']);
 
         header('location: jokes.php');
     } catch (PDOException $e) {
