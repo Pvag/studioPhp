@@ -4,6 +4,9 @@ include __DIR__ . '/../includes/DatabaseConnection.php'; // creates the PDO
 include __DIR__ . '/../controllers/JokeController.php';
 include __DIR__ . '/../classes/DatabaseTable.php';
 
+// avoids variable name clashes with local environment
+// after 'extraction' from "values['variables']"
+// (scope is limited to function level)
 function loadTemplate($values)
 {
     $template = $values['template'];
@@ -18,17 +21,8 @@ $authorsTable = new DatabaseTable($pdo, 'author', 'id');
 $jokeController = new JokeController($jokesTable, $authorsTable);
 
 try {
-    $action = $_GET['action'] ?? '';
-    if ($action == 'list') {
-        $values = $jokeController->list();
-    } else if ($action == 'delete') {
-        $values = $jokeController->delete($_POST['id']);
-    } else if ($action == 'edit') {
-        $id = $_GET['id'] ?? '';
-        $values = $jokeController->edit($id);
-    } else {
-        $values = $jokeController->home();
-    }
+    $action = $_GET['action'] ?? 'home'; // if index is called with no action or no valid action, home is loaded
+    $values = $jokeController->$action();
     $output = loadTemplate($values);
 } catch (PDOException $e) {
     $output = 'Sorry! ' . $e->getMessage();

@@ -1,4 +1,7 @@
 <?php
+
+// This is a "controller" class, so I save it in the 'controller' directory;
+// methods inside a "controller" class are called  * actions *.
 class JokeController
 {
     private $jokesTable;
@@ -47,13 +50,13 @@ class JokeController
         return $values;
     }
 
-    public function delete($id)
+    public function delete()
     {
-        $this->jokesTable->delete($id);
+        $this->jokesTable->delete($_POST['id']);
         header('location: jokes.php');
     }
 
-    public function edit($id)
+    public function edit()
     {
         if (isset($_POST['joke'])) {
             $authorID = 1; // TODO hard coded, for now
