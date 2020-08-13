@@ -15,8 +15,8 @@
             <div class="container">
                 <ul class="navbar-list">
                     <li class="navbar-item one-third column"><a class="navbar-link" href="index.php">Home</a></li>
-                    <li class="navbar-item one-third column"><a class="navbar-link" href="jokes.php">Jokes List</a></li>
-                    <li class="navbar-item one-third column"><a class="navbar-link" href="editjoke.php">Add Joke</a></li>
+                    <li class="navbar-item one-third column"><a class="navbar-link" href="index.php?action=list">Jokes List</a></li>
+                    <li class="navbar-item one-third column"><a class="navbar-link" href="index.php?action=edit">Add Joke</a></li>
                 </ul>
             </div>
         </nav>
