@@ -21,8 +21,14 @@ $authorsTable = new DatabaseTable($pdo, 'author', 'id');
 $jokeController = new JokeController($jokesTable, $authorsTable);
 
 try {
+    // check validity of url (lowercase)
     $action = $_GET['action'] ?? 'home'; // if index is called with no action or no valid action, home is loaded
-    $values = $jokeController->$action();
+    if ($action == strtolower($action)) {
+        $values = $jokeController->$action();
+    } else {
+        http_response_code(301); // permanent redirection (for search engines and browsers (correct bookmarks))
+        header('location: index.php?action=' . strtolower($action));
+    }
     $output = loadTemplate($values);
 } catch (PDOException $e) {
     $output = 'Sorry! ' . $e->getMessage();
