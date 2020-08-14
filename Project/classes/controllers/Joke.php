@@ -2,7 +2,7 @@
 
 // This is a "controller" class, so I save it in the 'controller' directory;
 // methods inside a "controller" class are called  * actions *.
-class JokeController
+class Joke
 {
     private $jokesTable;
     private $authorsTable;
