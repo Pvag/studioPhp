@@ -1,9 +1,12 @@
 <?php
+
+namespace Ninja;
+
 class EntryPoint
 {
     private $route;
     private $routes;
-    public function __construct(string $route, IjdbRoutes $routes)
+    public function __construct(string $route, \Ijdb\IjdbRoutes $routes)
     {
         $this->route = $route;
         $this->routes = $routes;

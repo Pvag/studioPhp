@@ -1,5 +1,7 @@
 <?php
 
+namespace Ijdb\Controllers;
+
 // This is a "controller" class, so I save it in the 'controller' directory;
 // methods inside a "controller" class are called  * actions *.
 class Joke
@@ -7,7 +9,7 @@ class Joke
     private $jokesTable;
     private $authorsTable;
 
-    public function __construct(DatabaseTable $jokesTable, DatabaseTable $authorsTable)
+    public function __construct(\Ninja\DatabaseTable $jokesTable, \Ninja\DatabaseTable $authorsTable)
     {
         $this->jokesTable = $jokesTable;
         $this->authorsTable = $authorsTable;
@@ -62,7 +64,7 @@ class Joke
             $authorID = 1; // TODO hard coded, for now
             $joke = $_POST['joke'];
             $joke['authorid'] = $authorID;
-            $joke['jokedate'] = new DateTime();
+            $joke['jokedate'] = new \DateTime();
             // $joke has the id key: save will determine whether this save must be an update (id already existing in db) or an insert (no value provided for id)
             $this->jokesTable->save($joke);
             header('location: /joke/list');
