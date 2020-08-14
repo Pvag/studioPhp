@@ -3,7 +3,7 @@ class EntryPoint
 {
     private $route;
     private $routes;
-    public function __construct(string $route, IjdbActions $routes)
+    public function __construct(string $route, IjdbRoutes $routes)
     {
         $this->route = $route;
         $this->routes = $routes;

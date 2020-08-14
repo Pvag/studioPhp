@@ -6,7 +6,7 @@
 // EntryPoint.php would remain unaltered, though.
 // So EntryPoint.php is a framework class (independent
 // of the specific project at hand).
-class IjdbActions
+class IjdbRoutes
 {
     public function __construct()
     {
@@ -14,10 +14,10 @@ class IjdbActions
 
     public function callAction($route)
     {
-        include __DIR__ . '/../includes/DatabaseConnection.php'; // creates the PDO
-        include __DIR__ . '/../classes/Ninja/DatabaseTable.php';
-        include __DIR__ . '/../classes/controllers/Joke.php';
-        include __DIR__ . '/../classes/controllers/Register.php';
+        include __DIR__ . '/../../includes/DatabaseConnection.php'; // creates the PDO
+        include __DIR__ . '/../Ninja/DatabaseTable.php';
+        include __DIR__ . '/../controllers/Joke.php';
+        include __DIR__ . '/../controllers/Register.php';
 
         $jokesTable = new DatabaseTable($pdo, 'joke', 'id');
         $authorsTable = new DatabaseTable($pdo, 'author', 'id');
