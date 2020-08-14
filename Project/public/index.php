@@ -23,7 +23,7 @@ try {
     // controller/action
     $route = ltrim((strtok($_SERVER['REQUEST_URI'], '?')), '/') ?? 'joke/home';
     if ($route !== strtolower($route)) {
-        http_response_code(301); // permanent redirect
+        http_response_code(301); // permanent redirect (great for search engines and bookmarking in browser)
         header('location: ' . strtolower($route));
     }
     // * parameters injection *

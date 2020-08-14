@@ -41,8 +41,8 @@
                 ?>
             </div>
         </div>
-        <a id="edit-link" class="inline" href="index.php?action=edit&id=<?= $joke['id'] ?>&joketext=<?= $joke['joketext'] ?>">Edit</a>
-        <form class="inline" action="index.php?action=delete" method="POST">
+        <a id="edit-link" class="inline" href="/joke/edit?id=<?= $joke['id'] ?>&joketext=<?= $joke['joketext'] ?>">Edit</a>
+        <form class="inline" action="/joke/delete" method="POST">
             <input type="hidden" name="id" value="<?= $joke['id'] ?>">
             <input type="submit" value="Delete">
         </form>
