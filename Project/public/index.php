@@ -18,16 +18,37 @@ function loadTemplate($values)
 
 $jokesTable = new DatabaseTable($pdo, 'joke', 'id');
 $authorsTable = new DatabaseTable($pdo, 'author', 'id');
-$jokeController = new JokeController($jokesTable, $authorsTable);
 
 try {
-    // check validity of url (lowercase)
-    $action = $_GET['action'] ?? 'home'; // if index is called with no action or no valid action, home is loaded
-    if ($action == strtolower($action)) {
-        $values = $jokeController->$action();
+    // controller/action
+    $route = ltrim((strtok($_SERVER['REQUEST_URI'], '?')), '/') ?? 'joke/home';
+    if ($route !== strtolower($route)) {
+        http_response_code(301); // permanent redirect
+        header('location: ' . strtolower($route));
+    }
+    // * parameters injection *
+    //     solving the dependency problem (different controllers require different parameters)
+    //     using multiple if / else clauses : redundant but safe
+    // (a Service Locator would be more succinct, but is considered bad practice)
+    if ($route === 'joke/list') {
+        $jokeController = new JokeController($jokesTable, $authorsTable);
+        $values = $jokeController->list();
+    } else if ($route === 'joke/home') {
+        $jokeController = new JokeController($jokesTable, $authorsTable);
+        $values = $jokeController->home();
+    } else if ($route === 'joke/edit') {
+        $jokeController = new JokeController($jokesTable, $authorsTable);
+        $values = $jokeController->edit();
+    } else if ($route === 'joke/delete') {
+        $jokeController = new JokeController($jokesTable, $authorsTable);
+        $jokeController->delete();
+    } else if ($route === 'author/edit') {
+        $authorController = new RegisterController($authorsTable);
+        // TODO
     } else {
-        http_response_code(301); // permanent redirection (for search engines and browsers (correct bookmarks))
-        header('location: index.php?action=' . strtolower($action));
+        // route home
+        $route = 'joke/home';
+        header('location: /' . $route);
     }
     $output = loadTemplate($values);
 } catch (PDOException $e) {
