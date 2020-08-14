@@ -2,7 +2,7 @@
 
 
 try {
-    include __DIR__ . '/../classes/EntryPoint.php';
+    include __DIR__ . '/../classes/Ninja/EntryPoint.php';
     include __DIR__ . '/../classes/IjdbActions.php';
     // controller/action
     $route = ltrim((strtok($_SERVER['REQUEST_URI'], '?')), '/') ?? 'joke/home';

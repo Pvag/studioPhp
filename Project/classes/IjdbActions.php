@@ -15,7 +15,7 @@ class IjdbActions
     public function callAction($route)
     {
         include __DIR__ . '/../includes/DatabaseConnection.php'; // creates the PDO
-        include __DIR__ . '/../classes/DatabaseTable.php';
+        include __DIR__ . '/../classes/Ninja/DatabaseTable.php';
         include __DIR__ . '/../classes/controllers/Joke.php';
         include __DIR__ . '/../classes/controllers/Register.php';
 

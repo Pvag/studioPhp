@@ -27,7 +27,7 @@ class EntryPoint
         $template = $values['template'];
         extract($values['variables']);
         ob_start();
-        include __DIR__ . '/../templates/' . $template . '.html.php'; // values for the specific template are extracted from $values['variables']
+        include __DIR__ . '/../../templates/' . $template . '.html.php'; // values for the specific template are extracted from $values['variables']
         return ob_get_clean();
     }
 
@@ -36,6 +36,6 @@ class EntryPoint
         $values = $this->routes->callAction($this->route);
         $title = $values['title'] ?? 'Error';
         $output = $this->loadTemplate($values);
-        include __DIR__ . '/../templates/layout.html.php';
+        include __DIR__ . '/../../templates/layout.html.php';
     }
 }
