@@ -60,26 +60,27 @@ class Joke
 
     public function edit()
     {
-        if (isset($_POST['joke'])) {
-            $authorID = 1; // TODO hard coded, for now
-            $joke = $_POST['joke'];
-            $joke['authorid'] = $authorID;
-            $joke['jokedate'] = new \DateTime();
-            // $joke has the id key: save will determine whether this save must be an update (id already existing in db) or an insert (no value provided for id)
-            $this->jokesTable->save($joke);
-            header('location: /joke/list');
-        } else {
-            $id = $_GET['id'] ?? ''; // is '' if user is in 'Add Joke' page
-            $joketext = $this->jokesTable->findById($id)['joketext']; // is 'null' if user is in 'Add Joke' page
-            $values = [
-                'title' => $id ? 'Edit joke' : 'Add joke',
-                'template' => 'editjoke',
-                'variables' => [
-                    'id' => $id,
-                    'joketext' => $joketext
-                ]
-            ];
-            return $values;
-        }
+        $id = $_GET['id'] ?? ''; // is '' if user is in 'Add Joke' page
+        $joketext = $this->jokesTable->findById($id)['joketext']; // is 'null' if user is in 'Add Joke' page
+        $values = [
+            'title' => $id ? 'Edit joke' : 'Add joke',
+            'template' => 'editjoke',
+            'variables' => [
+                'id' => $id,
+                'joketext' => $joketext
+            ]
+        ];
+        return $values;
+    }
+
+    public function saveEdit()
+    {
+        $authorID = 1; // TODO hard coded, for now
+        $joke = $_POST['joke'];
+        $joke['authorid'] = $authorID;
+        $joke['jokedate'] = new \DateTime();
+        // $joke has the id key: save will determine whether this save must be an update (id already existing in db) or an insert (no value provided for id)
+        $this->jokesTable->save($joke);
+        header('location: /joke/list');
     }
 }
