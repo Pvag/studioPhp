@@ -31,9 +31,25 @@ class Register
 
     public function registerUser()
     {
+        $valid = true;
         $author = $_POST['author'];
         $author['id'] = '';
-        $this->authorsTable->save($author);
-        header('location: /author/success');
+        // $error
+
+        if (empty($author['name'])) {
+            $valid = false;
+        }
+        if (empty($author['email'])) {
+            $valid = false;
+        }
+        if (empty($author['password'])) {
+            $valid = false;
+        }
+        if ($valid) {
+            $this->authorsTable->save($author);
+            header('location: /author/success');
+        } else {
+            header('location: /author/register');
+        }
     }
 }
