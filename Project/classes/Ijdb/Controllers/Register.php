@@ -56,7 +56,8 @@ class Register
                 'title' => 'Empty fields in Form!',
                 'template' => 'register',
                 'variables' => [
-                    'errors' => $errors
+                    'errors' => $errors,
+                    'author' => $author
                 ]
             ];
         }

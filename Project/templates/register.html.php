@@ -10,10 +10,10 @@
 <?php endif; ?>
 <form action="/author/register" method="POST">
     <label for="name">Name of the Joker</label>
-    <input type="text" name="author[name]">
+    <input type="text" name="author[name]" value="<?= $author['name'] ?? '' ?>">
     <label for="email">e-mail</label>
-    <input type="text" name="author[email]">
+    <input type="text" name="author[email]" value="<?= $author['email'] ?? '' ?>">
     <label for="password">Password</label>
-    <input type="text" name="author[password]">
+    <input type="text" name="author[password]" value="<?= $author['password'] ?? '' ?>">
     <input type="submit" value="Submit">
 </form>
