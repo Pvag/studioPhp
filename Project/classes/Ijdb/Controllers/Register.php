@@ -34,22 +34,31 @@ class Register
         $valid = true;
         $author = $_POST['author'];
         $author['id'] = '';
-        // $error
+        $errors = [];
 
         if (empty($author['name'])) {
             $valid = false;
+            $errors[] = 'No <b>name</b> provided!';
         }
         if (empty($author['email'])) {
             $valid = false;
+            $errors[] = 'No <b>email</b> provided!';
         }
         if (empty($author['password'])) {
             $valid = false;
+            $errors[] = 'No <b>password</b> provided!';
         }
         if ($valid) {
             $this->authorsTable->save($author);
             header('location: /author/success');
         } else {
-            header('location: /author/register');
+            return [
+                'title' => 'Empty fields in Form!',
+                'template' => 'register',
+                'variables' => [
+                    'errors' => $errors
+                ]
+            ];
         }
     }
 }

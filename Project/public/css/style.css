@@ -6,6 +6,18 @@
     margin-bottom: 0;
 }
 
+.errors {
+    background-color: lightyellow;
+    padding: 1em;
+    margin-bottom: 1em;
+    color: red;
+    overflow: auto;
+    border: 1px solid red;
+}
+.errors ul {
+    margin-left: 1em;
+}
+
 body {
     color: darkgray;
 }
