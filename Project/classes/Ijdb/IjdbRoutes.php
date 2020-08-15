@@ -23,6 +23,7 @@ class IjdbRoutes implements \Ninja\Routes
         $jokesTable = new DatabaseTable($pdo, 'joke', 'id'); // *** no need to specify \Ninja
         $authorsTable = new DatabaseTable($pdo, 'author', 'id');
         $jokeController = new Controllers\Joke($jokesTable, $authorsTable); // Controller is a sub-namespace to Ijdb
+        $authorController = new Controllers\Register($authorsTable);
         $routes = [
             'joke/edit' => [
                 'POST' => [
@@ -56,6 +57,22 @@ class IjdbRoutes implements \Ninja\Routes
                 'GET' => [
                     'controller' => $jokeController,
                     'action' => 'list'
+                ]
+            ],
+            'author/register' => [
+                'GET' => [
+                    'controller' => $authorController,
+                    'action' => 'registrationForm'
+                ],
+                'POST' => [
+                    'controller' => $authorController,
+                    'action' => 'registerUser'
+                ]
+            ],
+            'author/success' => [
+                'GET' => [
+                    'controller' => $authorController,
+                    'action' => 'success'
                 ]
             ]
         ];
