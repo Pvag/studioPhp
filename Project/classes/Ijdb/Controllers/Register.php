@@ -59,6 +59,8 @@ class Register
             $errors[] = 'No <b>password</b> provided!';
         }
         if ($valid) {
+            // encrypt password
+            $author['password'] = password_hash($author['password'], PASSWORD_DEFAULT);
             $this->authorsTable->save($author);
             header('location: /author/success');
         } else {
