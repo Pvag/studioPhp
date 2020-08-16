@@ -48,7 +48,7 @@ class EntryPoint
         // } catch ( $e) { // which error is this? How to handle wrong action given?
         //     $values = $controller->home();
         // }
-        $title = $values['title'] ?? 'Error';
+        $title = $values['title'];
         $output = $this->loadTemplate($values);
         include __DIR__ . '/../../templates/layout.html.php';
     }

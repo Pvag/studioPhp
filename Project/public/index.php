@@ -2,7 +2,7 @@
 
 try {
     include __DIR__ . '/../includes/autoloader.php';
-    $route = ltrim((strtok($_SERVER['REQUEST_URI'], '?')), '/') ?? 'joke/home'; // controller/action
+    $route = ltrim((strtok($_SERVER['REQUEST_URI'], '?')), '/') ?? 'joke/home'; // route is formed by 'controller/action'
     $method = $_SERVER['REQUEST_METHOD'];
     // an instance of the class with the routes (actions) is injected
     // into the instance of EntryPoint.

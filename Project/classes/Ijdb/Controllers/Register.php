@@ -44,6 +44,16 @@ class Register
             $valid = false;
             $errors[] = 'No <b>email</b> provided!';
         }
+        if (filter_var($author['email'], FILTER_VALIDATE_EMAIL) == false) {
+            $valid = false;
+            $errors[] = '<b>Email</b> is not valid!';
+        } else {
+            $author['email'] = strtolower($author['email']);
+            if (count($this->authorsTable->find('email', $author['email'])) > 0) {
+                $valid = false;
+                $errors[] = 'Email <b>already existing</b>!';
+            }
+        }
         if (empty($author['password'])) {
             $valid = false;
             $errors[] = 'No <b>password</b> provided!';
@@ -53,7 +63,7 @@ class Register
             header('location: /author/success');
         } else {
             return [
-                'title' => 'Empty fields in Form!',
+                'title' => 'Errors in Form!',
                 'template' => 'register',
                 'variables' => [
                     'errors' => $errors,

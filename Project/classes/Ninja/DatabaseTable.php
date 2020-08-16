@@ -80,6 +80,14 @@ class DatabaseTable
         return $result->fetch(\PDO::FETCH_ASSOC);
     }
 
+    function find($columnName, $value)
+    {
+        $sql = 'SELECT * FROM ' . $this->table . ' WHERE ' . $columnName . ' = :value';
+        $params = ['value' => $value];
+        $result = $this->query($sql, $params);
+        return $result->fetchAll();
+    }
+
     function update($params)
     {
         $sql = 'UPDATE ' . $this->table . ' SET ';
