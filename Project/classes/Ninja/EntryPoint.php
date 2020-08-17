@@ -66,7 +66,6 @@ class EntryPoint
             ];
             $page = $this->loadTemplate($layout);
             echo $page;
-            // include __DIR__ . '/../../templates/layout.html.php';
         }
     }
 }

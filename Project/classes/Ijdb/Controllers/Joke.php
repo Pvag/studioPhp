@@ -48,7 +48,8 @@ class Joke
             'template' => 'jokes',
             'variables' => [
                 'jokesCount' => $jokesCount,
-                'jokes' => $jokes
+                'jokes' => $jokes,
+                'userid' => $this->authentication->getUser()['id'] ?? null
             ]
         ];
         return $values;
@@ -56,20 +57,28 @@ class Joke
 
     public function delete()
     {
-        $this->jokesTable->delete($_POST['id']);
-        header('location: /joke/list');
+        $authorId = $this->jokesTable->findById($_POST['id'])['authorid'];
+        $userId = $this->authentication->getUser()['id'];
+        if ($userId == $authorId) {
+            $this->jokesTable->delete($_POST['id']);
+            header('location: /joke/list');
+        } else {
+            return;
+        }
     }
 
     public function edit()
     {
         $id = $_GET['id'] ?? ''; // is '' if user is in 'Add Joke' page
-        $joketext = $this->jokesTable->findById($id)['joketext']; // is 'null' if user is in 'Add Joke' page
+        $joke = $this->jokesTable->findById($id); // is 'null' if user is in 'Add Joke' page
         $values = [
             'title' => $id ? 'Edit joke' : 'Add joke',
             'template' => 'editjoke',
             'variables' => [
                 'id' => $id,
-                'joketext' => $joketext
+                'joketext' => $joke['joketext'],
+                'authorid' => $joke['authorid'] ?? null,
+                'userid' => $this->authentication->getUser()['id'] ?? null
             ]
         ];
         return $values;
@@ -77,14 +86,34 @@ class Joke
 
     public function saveEdit()
     {
-        // $author = $this->authorsTable->find('email', $_SESSION['username'])[0];
-        $author = $this->authentication->getUser();
-        $authorID = $author['id'];
         $joke = $_POST['joke'];
-        $joke['authorid'] = $authorID;
-        $joke['jokedate'] = new \DateTime();
-        // $joke has the id key: save will determine whether this save must be an update (id already existing in db) or an insert (no value provided for id)
-        $this->jokesTable->save($joke);
-        header('location: /joke/list');
+        $user = $this->authentication->getUser();
+        // case of insertion of new joke
+        if ($_POST['joke']['id'] == '') {
+            $joke['authorid'] = $user['id'];
+            $joke['jokedate'] = new \DateTime();
+            $this->jokesTable->save($joke);
+            header('location: /joke/list');
+        } else {
+            $oldPost = $this->jokesTable->findById($_POST['joke']['id']);
+            // case of edit of existing joke
+            if ($user['id'] == $oldPost['authorid']) {
+                $joke['authorid'] = $user['id'];
+                $joke['jokedate'] = new \DateTime();
+                $this->jokesTable->save($joke); // case of authorized edit
+                header('location: /joke/list');
+            } else {
+                return;
+                // return [
+                //     'title' => 'w',
+                //     'template' => 'test',
+                //     [
+                //         'joketext' => $joke['joketext'],
+                //         'authorid' => $joke['authorid'] ?? null,
+                //         'userid' => $this->authentication->getUser()['id'] ?? null
+                //     ]
+                // ]; // case of unauthorized edit
+            }
+        }
     }
 }

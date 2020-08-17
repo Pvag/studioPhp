@@ -41,11 +41,13 @@
                 ?>
             </div>
         </div>
-        <a id="edit-link" class="inline" href="/joke/edit?id=<?= $joke['id'] ?>&joketext=<?= $joke['joketext'] ?>">Edit</a>
-        <form class="inline" action="/joke/delete" method="POST">
-            <input type="hidden" name="id" value="<?= $joke['id'] ?>">
-            <input type="submit" value="Delete">
-        </form>
+        <?php if ($joke['authorid'] == $userid) : ?>
+            <a id="edit-link" class="inline" href="/joke/edit?id=<?= $joke['id'] ?>&joketext=<?= $joke['joketext'] ?>">Edit</a>
+            <form class="inline" action="/joke/delete" method="POST">
+                <input type="hidden" name="id" value="<?= $joke['id'] ?>">
+                <input type="submit" value="Delete">
+            </form>
+        <?php endif; ?>
     </blockquote>
     <hr>
 <?php endforeach; ?>

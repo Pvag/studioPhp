@@ -33,7 +33,7 @@ class Authentication
 
     public function isLoggedIn()
     {
-        if (!isset($_SESSION)) {
+        if (!isset($_SESSION['username'])) {
             return false;
         }
         $users = $this->userDb->find($this->usernameColumn, $_SESSION['username']);

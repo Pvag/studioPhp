@@ -49,6 +49,7 @@ class Login
     public function logout()
     {
         unset($_SESSION);
+        session_destroy();
         return [
             'title' => 'Logout',
             'template' => 'logout'
