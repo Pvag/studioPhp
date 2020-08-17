@@ -75,7 +75,8 @@ class Joke
 
     public function saveEdit()
     {
-        $authorID = 1; // TODO hard coded, for now
+        $author = $this->authorsTable->find('email', $_SESSION['username'])[0];
+        $authorID = $author['id'];
         $joke = $_POST['joke'];
         $joke['authorid'] = $authorID;
         $joke['jokedate'] = new \DateTime();
