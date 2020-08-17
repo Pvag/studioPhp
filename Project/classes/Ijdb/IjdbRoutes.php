@@ -26,7 +26,7 @@ class IjdbRoutes implements \Ninja\Routes
         include __DIR__ . '/../../includes/DatabaseConnection.php';
         $this->jokesTable = new DatabaseTable($pdo, 'joke', 'id'); // *** no need to specify \Ninja
         $this->authorsTable = new DatabaseTable($pdo, 'author', 'id');
-        $this->authentication = new Authentication($this->authorsTable, 'name', 'password');
+        $this->authentication = new Authentication($this->authorsTable, 'email', 'password');
     }
 
     // TODO how to handle wrong actions? Who is handling those? The calling env.?
@@ -34,7 +34,7 @@ class IjdbRoutes implements \Ninja\Routes
     {
         $jokeController = new Controllers\Joke($this->jokesTable, $this->authorsTable); // Controller is a sub-namespace to Ijdb
         $authorController = new Controllers\Register($this->authorsTable);
-        $loginController = new Controllers\Login();
+        $loginController = new Controllers\Login($this->authentication);
         $routes = [
             'joke/edit' => [
                 'POST' => [
@@ -93,6 +93,23 @@ class IjdbRoutes implements \Ninja\Routes
                     'controller' => $loginController,
                     'action' => 'loginError'
                 ]
+            ],
+            'login' => [
+                'GET' => [
+                    'controller' => $loginController,
+                    'action' => 'loginForm'
+                ],
+                'POST' => [
+                    'controller' => $loginController,
+                    'action' => 'processLogin'
+                ]
+            ],
+            'login/success' => [
+                'GET' => [
+                    'controller' => $loginController,
+                    'action' => 'success'
+                ],
+                'login' => true // !!!
             ]
         ];
         return $routes;

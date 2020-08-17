@@ -32,7 +32,9 @@ class EntryPoint
     private function loadTemplate($values)
     {
         $template = $values['template'];
-        extract($values['variables']);
+        if (isset($values['variables'])) {
+            extract($values['variables']);
+        }
         ob_start();
         include __DIR__ . '/../../templates/' . $template . '.html.php'; // values for the specific template are extracted from $values['variables']
         return ob_get_clean();

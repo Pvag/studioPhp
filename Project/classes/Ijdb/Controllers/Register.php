@@ -16,7 +16,6 @@ class Register
         return [
             'template' => 'register',
             'title' => 'Register an Account',
-            'variables' => []
         ];
     }
 
@@ -25,7 +24,6 @@ class Register
         return [
             'template' => 'registersuccess',
             'title' => 'Registration Successful',
-            'variables' => []
         ];
     }
 
