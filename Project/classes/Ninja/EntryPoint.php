@@ -43,13 +43,18 @@ class EntryPoint
         $routes = $this->routes->getRoutes();
         $controller = $routes[$this->route][$this->method]['controller'];
         $action = $routes[$this->route][$this->method]['action'];
-        // try {
-        $values = $controller->$action();
-        // } catch ( $e) { // which error is this? How to handle wrong action given?
-        //     $values = $controller->home();
-        // }
-        $title = $values['title'];
-        $output = $this->loadTemplate($values);
-        include __DIR__ . '/../../templates/layout.html.php';
+        $authentication = $this->routes->getAuthentication();
+        if (isset($routes[$this->route]['login']) && !$authentication->isLoggedIn()) {
+            header('location: /login/error');
+        } else {
+            // try {
+            $values = $controller->$action();
+            // } catch ( $e) { // which error is this? How to handle wrong action given?
+            //     $values = $controller->home();
+            // }
+            $title = $values['title'];
+            $output = $this->loadTemplate($values);
+            include __DIR__ . '/../../templates/layout.html.php';
+        }
     }
 }
