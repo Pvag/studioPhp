@@ -30,7 +30,7 @@
 <?php foreach ($jokes as $joke) : ?>
     <blockquote class="joke">
         <div style="display:inline;">
-            <?= htmlspecialchars($joke['joketext'], ENT_QUOTES, 'UTF-8'); ?>,
+            <div style="color: black; font-weight: bold"><?= htmlspecialchars($joke['joketext'], ENT_QUOTES, 'UTF-8'); ?></div> -
             <div class="inline italic centered">
                 by
                 <a href="mailto:<?= $joke['email'] ?>"><?= $joke['name'] ?></a>

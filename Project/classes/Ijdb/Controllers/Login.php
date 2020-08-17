@@ -45,4 +45,13 @@ class Login
             'template' => 'loginsuccess'
         ];
     }
+
+    public function logout()
+    {
+        unset($_SESSION);
+        return [
+            'title' => 'Logout',
+            'template' => 'logout'
+        ];
+    }
 }

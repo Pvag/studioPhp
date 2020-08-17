@@ -43,4 +43,11 @@ class Authentication
             return false;
         }
     }
+
+    public function getUser()
+    {
+        if ($this->isLoggedIn()) {
+            return $this->userDb->find($this->usernameColumn, $_SESSION['username'])[0];
+        } else return false;
+    }
 }

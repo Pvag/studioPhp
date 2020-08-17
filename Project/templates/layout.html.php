@@ -14,9 +14,14 @@
         <nav class="navbar">
             <div class="container">
                 <ul class="navbar-list">
-                    <li class="navbar-item one-third column"><a class="navbar-link" href="/joke/home">Home</a></li>
-                    <li class="navbar-item one-third column"><a class="navbar-link" href="/joke/list">Jokes List</a></li>
-                    <li class="navbar-item one-third column"><a class="navbar-link" href="/joke/edit">Add Joke</a></li>
+                    <li class="navbar-item two columns"><a class="navbar-link" href="/joke/home">Home</a></li>
+                    <li class="navbar-item two columns"><a class="navbar-link" href="/joke/list">Jokes List</a></li>
+                    <li class="navbar-item two columns"><a class="navbar-link" href="/joke/edit">Add Joke</a></li>
+                    <?php if (!$loggedin) : ?>
+                        <li><a href="/login">Login</a></li>
+                    <?php else : ?>
+                        <li><a href="/logout">Logout</a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </nav>

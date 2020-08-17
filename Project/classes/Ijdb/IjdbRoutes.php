@@ -32,7 +32,7 @@ class IjdbRoutes implements \Ninja\Routes
     // TODO how to handle wrong actions? Who is handling those? The calling env.?
     public function getRoutes(): array
     {
-        $jokeController = new Controllers\Joke($this->jokesTable, $this->authorsTable); // Controller is a sub-namespace to Ijdb
+        $jokeController = new Controllers\Joke($this->jokesTable, $this->authorsTable, $this->authentication);
         $authorController = new Controllers\Register($this->authorsTable);
         $loginController = new Controllers\Login($this->authentication);
         $routes = [
@@ -110,6 +110,12 @@ class IjdbRoutes implements \Ninja\Routes
                     'action' => 'success'
                 ],
                 'login' => true // !!!
+            ],
+            'logout' => [
+                'GET' => [
+                    'controller' => $loginController,
+                    'action' => 'logout'
+                ]
             ]
         ];
         return $routes;

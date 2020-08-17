@@ -54,9 +54,19 @@ class EntryPoint
             // } catch ( $e) { // which error is this? How to handle wrong action given?
             //     $values = $controller->home();
             // }
+            // page-specific template
             $title = $values['title'];
             $output = $this->loadTemplate($values);
-            include __DIR__ . '/../../templates/layout.html.php';
+            // global template (layout)
+            $layout['template'] = 'layout';
+            $layout['variables'] = [
+                'title' => $title,
+                'loggedin' => $this->routes->getAuthentication()->isLoggedIn(),
+                'output' => $output
+            ];
+            $page = $this->loadTemplate($layout);
+            echo $page;
+            // include __DIR__ . '/../../templates/layout.html.php';
         }
     }
 }

@@ -8,11 +8,13 @@ class Joke
 {
     private $jokesTable;
     private $authorsTable;
+    private $authentication;
 
-    public function __construct(\Ninja\DatabaseTable $jokesTable, \Ninja\DatabaseTable $authorsTable)
+    public function __construct(\Ninja\DatabaseTable $jokesTable, \Ninja\DatabaseTable $authorsTable, \Ninja\Authentication $authentication)
     {
         $this->jokesTable = $jokesTable;
         $this->authorsTable = $authorsTable;
+        $this->authentication = $authentication;
     }
 
     public function home()
@@ -75,7 +77,8 @@ class Joke
 
     public function saveEdit()
     {
-        $author = $this->authorsTable->find('email', $_SESSION['username'])[0];
+        // $author = $this->authorsTable->find('email', $_SESSION['username'])[0];
+        $author = $this->authentication->getUser();
         $authorID = $author['id'];
         $joke = $_POST['joke'];
         $joke['authorid'] = $authorID;
