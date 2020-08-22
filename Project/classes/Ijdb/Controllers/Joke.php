@@ -88,32 +88,21 @@ class Joke
     {
         $joke = $_POST['joke'];
         $user = $this->authentication->getUser();
+        // temp: turn user from array into object
+        $userObject = new \Ijdb\Entity\Author($this->jokesTable);
+        $userObject->id = $user['id'];
+        $userObject->name = $user['name'];
+        $userObject->email = $user['email'];
+        $userObject->password = $user['password'];
+
         // case of insertion of new joke
-        if ($_POST['joke']['id'] == '') {
-            $joke['authorid'] = $user['id'];
+        $oldPost = $this->jokesTable->findById($_POST['joke']['id']);
+        if ($_POST['joke']['id'] == '' || $user['id'] == $oldPost['authorid']) {
             $joke['jokedate'] = new \DateTime();
-            $this->jokesTable->save($joke);
+            $userObject->addJoke($joke);
             header('location: /joke/list');
         } else {
-            $oldPost = $this->jokesTable->findById($_POST['joke']['id']);
-            // case of edit of existing joke
-            if ($user['id'] == $oldPost['authorid']) {
-                $joke['authorid'] = $user['id'];
-                $joke['jokedate'] = new \DateTime();
-                $this->jokesTable->save($joke); // case of authorized edit
-                header('location: /joke/list');
-            } else {
-                return;
-                // return [
-                //     'title' => 'w',
-                //     'template' => 'test',
-                //     [
-                //         'joketext' => $joke['joketext'],
-                //         'authorid' => $joke['authorid'] ?? null,
-                //         'userid' => $this->authentication->getUser()['id'] ?? null
-                //     ]
-                // ]; // case of unauthorized edit
-            }
+            return; // case of unauthorized edit
         }
     }
 }
