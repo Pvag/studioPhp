@@ -4,30 +4,28 @@ namespace Ninja;
 
 class Authentication
 {
-    private $userDb;
+    private $authorsTable;
     private $usernameColumn;
     private $passwordColumn;
 
-    public function __construct(DatabaseTable $userDb, $usernameColumn, $passwordColumn)
+    public function __construct(DatabaseTable $authorsTable, $usernameColumn, $passwordColumn)
     {
         session_start();
-        $this->userDb = $userDb;
+        $this->authorsTable = $authorsTable;
         $this->usernameColumn = $usernameColumn;
         $this->passwordColumn = $passwordColumn;
     }
 
     public function login($username, $password)
     {
-        $users = $this->userDb->find($this->usernameColumn, strtolower($username));
-        if (empty($users)) {
-            return false;
+        $users = $this->authorsTable->find($this->usernameColumn, strtolower($username));
+        if (!empty($users) && password_verify($password, $users[0]->{$this->passwordColumn})) {
+            session_regenerate_id();
+            $_SESSION['username'] = strtolower($username);
+            $_SESSION['password'] = $users[0]->{$this->passwordColumn};
+            return true;
         } else {
-            if (password_verify($password, $users[0][$this->passwordColumn])) {
-                session_regenerate_id();
-                $_SESSION['username'] = strtolower($username);
-                $_SESSION['password'] = $users[0][$this->passwordColumn];
-                return true;
-            }
+            return false;
         }
     }
 
@@ -36,8 +34,8 @@ class Authentication
         if (!isset($_SESSION['username'])) {
             return false;
         }
-        $users = $this->userDb->find($this->usernameColumn, $_SESSION['username']);
-        if (!empty($users) && ($_SESSION['password'] === $users[0][$this->passwordColumn])) {
+        $users = $this->authorsTable->find($this->usernameColumn, $_SESSION['username']);
+        if (!empty($users) && ($_SESSION['password'] === $users[0]->{$this->passwordColumn})) {
             return true;
         } else {
             return false;
@@ -47,7 +45,7 @@ class Authentication
     public function getUser()
     {
         if ($this->isLoggedIn()) {
-            return $this->userDb->find($this->usernameColumn, $_SESSION['username'])[0];
+            return $this->authorsTable->find($this->usernameColumn, $_SESSION['username'])[0];
         } else return false;
     }
 }

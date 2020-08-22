@@ -29,19 +29,7 @@ class Joke
 
     public function list()
     {
-        //// same result in $jokes
-        ////
-        // $jokes = allJokes($pdo); // 1 db access
-        ////
-        // N+1 db accesses (N = number of jokes in db)
-        $jokesOnly = $this->jokesTable->findAll(); // 1 db access
-        foreach ($jokesOnly as $joke) {
-            $author = $this->authorsTable->findById($joke['authorid']); // N db accesses // TODO FIX AUTHOR TABLE!!
-            $joke['name'] = $author['name'];
-            $joke['email'] = $author['email'];
-            $jokes[] = $joke;
-        }
-
+        $jokes = $this->jokesTable->findAll();
         $jokesCount = $this->jokesTable->total();
         $values = [
             'title' => 'Joke List',
@@ -49,7 +37,7 @@ class Joke
             'variables' => [
                 'jokesCount' => $jokesCount,
                 'jokes' => $jokes,
-                'userid' => $this->authentication->getUser()['id'] ?? null
+                'userid' => $this->authentication->getUser()->id ?? null
             ]
         ];
         return $values;
@@ -57,8 +45,8 @@ class Joke
 
     public function delete()
     {
-        $authorId = $this->jokesTable->findById($_POST['id'])['authorid'];
-        $userId = $this->authentication->getUser()['id'];
+        $authorId = $this->jokesTable->findById($_POST['id'])->authorid;
+        $userId = $this->authentication->getUser()->id;
         if ($userId == $authorId) {
             $this->jokesTable->delete($_POST['id']);
             header('location: /joke/list');
@@ -76,9 +64,9 @@ class Joke
             'template' => 'editjoke',
             'variables' => [
                 'id' => $id,
-                'joketext' => $joke['joketext'],
-                'authorid' => $joke['authorid'] ?? null,
-                'userid' => $this->authentication->getUser()['id'] ?? null
+                'joketext' => $joke->joketext ?? null,
+                'authorid' => $joke->authorid ?? null,
+                'userid' => $this->authentication->getUser()->id ?? null
             ]
         ];
         return $values;
@@ -88,18 +76,12 @@ class Joke
     {
         $joke = $_POST['joke'];
         $user = $this->authentication->getUser();
-        // temp: turn user from array into object
-        $userObject = new \Ijdb\Entity\Author($this->jokesTable);
-        $userObject->id = $user['id'];
-        $userObject->name = $user['name'];
-        $userObject->email = $user['email'];
-        $userObject->password = $user['password'];
 
         // case of insertion of new joke
         $oldPost = $this->jokesTable->findById($_POST['joke']['id']);
-        if ($_POST['joke']['id'] == '' || $user['id'] == $oldPost['authorid']) {
-            $joke['jokedate'] = new \DateTime();
-            $userObject->addJoke($joke);
+        if ($_POST['joke']['id'] == '' || $user->id == $oldPost->authorid) {
+            $joke->jokedate = new \DateTime();
+            $user->addJoke($joke);
             header('location: /joke/list');
         } else {
             return; // case of unauthorized edit

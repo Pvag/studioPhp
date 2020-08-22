@@ -7,12 +7,16 @@ class DatabaseTable
     private $pdo;
     private $table;
     private $primaryKey;
+    private $className;
+    private $constructorParams;
 
-    public function __construct(\PDO $pdo, string $table, string $primaryKey)
+    public function __construct(\PDO $pdo, string $table, string $primaryKey, string $className = '\stdClass', array $constructorParams = [])
     {
         $this->pdo = $pdo;
         $this->table = $table;
         $this->primaryKey = $primaryKey;
+        $this->className = $className;
+        $this->constructorParams = $constructorParams;
     }
 
     private function query($sql, $parameters = [])
@@ -51,7 +55,7 @@ class DatabaseTable
     {
         $sql = 'SELECT * FROM ' . $this->table;
         $result = $this->query($sql);
-        return $result->fetchAll();
+        return $result->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorParams);
     }
 
     function delete($id)
@@ -77,7 +81,7 @@ class DatabaseTable
         $sql = 'SELECT * FROM ' . $this->table . ' WHERE ' . $this->primaryKey . ' = :primaryKey';
         $params = ['primaryKey' => $id];
         $result = $this->query($sql, $params);
-        return $result->fetch(\PDO::FETCH_ASSOC);
+        return $result->fetchObject($this->className, $this->constructorParams);
     }
 
     function find($columnName, $value)
@@ -85,7 +89,7 @@ class DatabaseTable
         $sql = 'SELECT * FROM ' . $this->table . ' WHERE ' . $columnName . ' = :value';
         $params = ['value' => $value];
         $result = $this->query($sql, $params);
-        return $result->fetchAll();
+        return $result->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorParams);
     }
 
     function update($params)

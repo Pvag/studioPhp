@@ -2,8 +2,6 @@
 
 namespace Ijdb\Entity;
 
-use DateTime;
-
 class Author
 {
     public $id;
