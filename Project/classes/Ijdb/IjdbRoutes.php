@@ -19,6 +19,7 @@ class IjdbRoutes implements \Ninja\Routes
 {
     private $jokesTable;
     private $authorsTable;
+    private $categoriesTable;
     private $authentication;
 
     public function __construct()
@@ -26,6 +27,7 @@ class IjdbRoutes implements \Ninja\Routes
         include __DIR__ . '/../../includes/DatabaseConnection.php';
         $this->jokesTable = new DatabaseTable($pdo, 'joke', 'id', '\Ijdb\Entity\Joke', [&$this->authorsTable]);
         $this->authorsTable = new DatabaseTable($pdo, 'author', 'id', '\Ijdb\Entity\Author', [&$this->jokesTable]);
+        $this->categoriesTable = new DatabaseTable($pdo, 'category', 'id');
         $this->authentication = new Authentication($this->authorsTable, 'email', 'password');
     }
 
@@ -34,6 +36,7 @@ class IjdbRoutes implements \Ninja\Routes
     {
         $jokeController = new Controllers\Joke($this->jokesTable, $this->authorsTable, $this->authentication);
         $authorController = new Controllers\Register($this->authorsTable);
+        $categoryController = new Controllers\Category($this->categoriesTable);
         $loginController = new Controllers\Login($this->authentication);
         $routes = [
             'joke/edit' => [
@@ -116,6 +119,31 @@ class IjdbRoutes implements \Ninja\Routes
                     'controller' => $loginController,
                     'action' => 'logout'
                 ]
+            ],
+            'category/edit' => [
+                'GET' => [
+                    'controller' => $categoryController,
+                    'action' => 'edit'
+                ],
+                'POST' => [
+                    'controller' => $categoryController,
+                    'action' => 'saveEdit'
+                ],
+                'login' => true
+            ],
+            'category/list' => [
+                'GET' => [
+                    'controller' => $categoryController,
+                    'action' => 'list'
+                ],
+                'login' => true
+            ],
+            'category/delete' => [
+                'POST' => [
+                    'controller' => $categoryController,
+                    'action' => 'delete'
+                ],
+                'login' => true
             ]
         ];
         return $routes;
