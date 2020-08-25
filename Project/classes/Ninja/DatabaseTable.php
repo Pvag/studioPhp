@@ -46,10 +46,10 @@ class DatabaseTable
             // if the value provided for the primary key inside $params already exists in the db,
             // the code in the 'catch' block is executed, performing an update of an existing value
             $entity = new $this->className(...$this->constructorParams);
-            $entity->{$this->primaryKey} = $this->insert($params);
-            foreach ($params as $key => $param) {
+            foreach ($params as $key => $param) { // turns array into object
                 $entity->$key = $param;
             }
+            $entity->{$primaryKey} = $this->insert($params);
             return $entity;
         } catch (\PDOException $e) {
             $this->update($params);
