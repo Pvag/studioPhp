@@ -39,21 +39,21 @@ class DatabaseTable
     public function save($params)
     {
         $primaryKey = $this->primaryKey;
+        $entity = new $this->className(...$this->constructorParams);
+        foreach ($params as $key => $param) { // turns array into object
+            $entity->$key = $param;
+        }
         try {
             if ($params[$primaryKey] == '') {
                 $params[$primaryKey] = null; // take advantage of mysql's auto increment for the new primary key
             }
             // if the value provided for the primary key inside $params already exists in the db,
             // the code in the 'catch' block is executed, performing an update of an existing value
-            $entity = new $this->className(...$this->constructorParams);
-            foreach ($params as $key => $param) { // turns array into object
-                $entity->$key = $param;
-            }
             $entity->{$primaryKey} = $this->insert($params);
-            return $entity;
         } catch (\PDOException $e) {
-            $this->update($params);
+            $entity->{$primaryKey} = $this->update($params);
         }
+        return $entity;
     }
 
     public function findAll()
@@ -63,14 +63,14 @@ class DatabaseTable
         return $result->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorParams);
     }
 
-    function delete($id)
+    public function delete($id)
     {
         $sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $this->primaryKey . ' = ' . ':primaryKey';
         $params = ['primaryKey' => $id];
         $this->query($sql, $params);
     }
 
-    function insert($params)
+    private function insert($params)
     {
         $sql = 'INSERT INTO ' . $this->table . ' SET ';
         foreach ($params as $key => $value) {
@@ -82,7 +82,7 @@ class DatabaseTable
         return $this->pdo->lastInsertId();
     }
 
-    function findById($id)
+    public function findById($id)
     {
         $sql = 'SELECT * FROM ' . $this->table . ' WHERE ' . $this->primaryKey . ' = :primaryKey';
         $params = ['primaryKey' => $id];
@@ -90,7 +90,7 @@ class DatabaseTable
         return $result->fetchObject($this->className, $this->constructorParams);
     }
 
-    function find($columnName, $value)
+    public function find($columnName, $value)
     {
         $sql = 'SELECT * FROM ' . $this->table . ' WHERE ' . $columnName . ' = :value';
         $params = ['value' => $value];
@@ -98,7 +98,7 @@ class DatabaseTable
         return $result->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorParams);
     }
 
-    function update($params)
+    private function update($params)
     {
         $sql = 'UPDATE ' . $this->table . ' SET ';
         foreach ($params as $key => $value) {
@@ -109,9 +109,10 @@ class DatabaseTable
         $params['primarykey'] = $params[$this->primaryKey];
         $params = $this->processDates($params);
         $this->query($sql, $params);
+        return $this->pdo->lastInsertId();
     }
 
-    function total()
+    public function total()
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->table;
         $result = $this->query($sql);

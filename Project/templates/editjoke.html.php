@@ -2,10 +2,11 @@
     <form action="/joke/edit" method="POST">
         <label for="text">Text of the joke:</label>
         <textarea name="joke[joketext]" cols="30" rows="10"><?= $joketext ?? '' ?></textarea>
+        <br>
         <input type="hidden" name="joke[id]" value="<?= $id ?? '' ?>">
         <?php foreach ($categories as $category) : ?>
-            <label for="category"><?= $category->name ?></label>
             <input type="checkbox" name="category[]" value="<?= $category->id ?>">
+            <label><?= $category->name ?></label>
         <?php endforeach; ?>
         <input type="submit" value="Save">
     </form>

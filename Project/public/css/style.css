@@ -25,3 +25,18 @@ body {
 .joketext {
     color: magenta;
 }
+
+form p {
+    clear: both;
+}
+
+input[type='checkbox'] {
+    float: left;
+    clear: left;
+    width: auto;
+    margin-right: 10px;
+}
+
+input[type='checkbox'] + label {
+    clear: right;
+}
