@@ -13,7 +13,7 @@
 namespace Ijdb;
 
 use Ninja\Authentication;
-use Ninja\DatabaseTable; // ***
+use Ninja\DatabaseTable;
 
 class IjdbRoutes implements \Ninja\Routes
 {
@@ -25,16 +25,17 @@ class IjdbRoutes implements \Ninja\Routes
     public function __construct()
     {
         include __DIR__ . '/../../includes/DatabaseConnection.php';
-        $this->jokesTable = new DatabaseTable($pdo, 'joke', 'id', '\Ijdb\Entity\Joke', [&$this->authorsTable]);
+        $this->jokesTable = new DatabaseTable($pdo, 'joke', 'id', '\Ijdb\Entity\Joke', [&$this->authorsTable, &$this->jokesCategoriesTable]);
         $this->authorsTable = new DatabaseTable($pdo, 'author', 'id', '\Ijdb\Entity\Author', [&$this->jokesTable]);
         $this->categoriesTable = new DatabaseTable($pdo, 'category', 'id');
+        $this->jokesCategoriesTable = new DatabaseTable($pdo, 'joke_category', 'categoryId');
         $this->authentication = new Authentication($this->authorsTable, 'email', 'password');
     }
 
     // TODO how to handle wrong actions? Who is handling those? The calling env.?
     public function getRoutes(): array
     {
-        $jokeController = new Controllers\Joke($this->jokesTable, $this->authorsTable, $this->authentication);
+        $jokeController = new Controllers\Joke($this->jokesTable, $this->authorsTable, $this->categoriesTable, $this->authentication);
         $authorController = new Controllers\Register($this->authorsTable);
         $categoryController = new Controllers\Category($this->categoriesTable);
         $loginController = new Controllers\Login($this->authentication);

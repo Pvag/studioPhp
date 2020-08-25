@@ -8,12 +8,14 @@ class Joke
 {
     private $jokesTable;
     private $authorsTable;
+    private $categoriesTable;
     private $authentication;
 
-    public function __construct(\Ninja\DatabaseTable $jokesTable, \Ninja\DatabaseTable $authorsTable, \Ninja\Authentication $authentication)
+    public function __construct(\Ninja\DatabaseTable $jokesTable, \Ninja\DatabaseTable $authorsTable, \Ninja\DatabaseTable $categoriesTable, \Ninja\Authentication $authentication)
     {
         $this->jokesTable = $jokesTable;
         $this->authorsTable = $authorsTable;
+        $this->categoriesTable = $categoriesTable;
         $this->authentication = $authentication;
     }
 
@@ -59,6 +61,7 @@ class Joke
     {
         $id = $_GET['id'] ?? ''; // is '' if user is in 'Add Joke' page
         $joke = $this->jokesTable->findById($id); // is 'null' if user is in 'Add Joke' page
+        $categories = $this->categoriesTable->findAll();
         $values = [
             'title' => $id ? 'Edit joke' : 'Add joke',
             'template' => 'editjoke',
@@ -66,7 +69,8 @@ class Joke
                 'id' => $id,
                 'joketext' => $joke->joketext ?? null,
                 'authorid' => $joke->authorid ?? null,
-                'userid' => $this->authentication->getUser()->id ?? null
+                'userid' => $this->authentication->getUser()->id ?? null,
+                'categories' => $categories // TODO add already selected categories
             ]
         ];
         return $values;
@@ -80,8 +84,12 @@ class Joke
         // case of insertion of new joke
         $oldPost = $this->jokesTable->findById($_POST['joke']['id']);
         if ($_POST['joke']['id'] == '' || $user->id == $oldPost->authorid) {
-            $joke->jokedate = new \DateTime();
-            $user->addJoke($joke);
+            $joke['jokedate'] = new \DateTime();
+            $entity = $user->addJoke($joke);
+            $categories = $_POST['category'];
+            foreach ($categories as $category) {
+                $entity->addCategory($category);
+            }
             header('location: /joke/list');
         } else {
             return; // case of unauthorized edit

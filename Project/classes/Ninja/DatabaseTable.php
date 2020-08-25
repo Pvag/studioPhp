@@ -45,7 +45,12 @@ class DatabaseTable
             }
             // if the value provided for the primary key inside $params already exists in the db,
             // the code in the 'catch' block is executed, performing an update of an existing value
-            $this->insert($params);
+            $entity = new $this->className(...$this->constructorParams);
+            $entity->{$this->primaryKey} = $this->insert($params);
+            foreach ($params as $key => $param) {
+                $entity->$key = $param;
+            }
+            return $entity;
         } catch (\PDOException $e) {
             $this->update($params);
         }
@@ -74,6 +79,7 @@ class DatabaseTable
         $sql = rtrim($sql, ',');
         $params = $this->processDates($params);
         $this->query($sql, $params);
+        return $this->pdo->lastInsertId();
     }
 
     function findById($id)
