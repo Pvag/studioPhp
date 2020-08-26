@@ -47,8 +47,6 @@ class DatabaseTable
             if ($params[$primaryKey] == '') {
                 $params[$primaryKey] = null; // take advantage of mysql's auto increment for the new primary key
             }
-            // if the value provided for the primary key inside $params already exists in the db,
-            // the code in the 'catch' block is executed, performing an update of an existing value
             $entity->{$primaryKey} = $this->insert($params);
         } catch (\PDOException $e) {
             $entity->{$primaryKey} = $this->update($params);
@@ -70,7 +68,7 @@ class DatabaseTable
         $this->query($sql, $params);
     }
 
-    private function insert($params)
+    public function insert($params)
     {
         $sql = 'INSERT INTO ' . $this->table . ' SET ';
         foreach ($params as $key => $value) {
@@ -109,7 +107,7 @@ class DatabaseTable
         $params['primarykey'] = $params[$this->primaryKey];
         $params = $this->processDates($params);
         $this->query($sql, $params);
-        return $this->pdo->lastInsertId();
+        return $params[$this->primaryKey];
     }
 
     public function total()

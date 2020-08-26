@@ -82,8 +82,8 @@ class Joke
         $user = $this->authentication->getUser();
 
         // case of insertion of new joke
-        $oldPost = $this->jokesTable->findById($_POST['joke']['id']);
-        if ($_POST['joke']['id'] == '' || $user->id == $oldPost->authorid) {
+        $oldPost = $this->jokesTable->findById($joke['id']);
+        if ($joke['id'] == '' || $user->id == $oldPost->authorid) {
             $joke['jokedate'] = new \DateTime();
             $entity = $user->addJoke($joke);
             $categories = $_POST['category'];

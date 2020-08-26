@@ -28,7 +28,7 @@ class Joke
 
     public function addCategory($category)
     {
-        $this->jokesCategoriesTable->save([
+        $this->jokesCategoriesTable->insert([
             'jokeId' => $this->id,
             'categoryId' => $category
         ]);
