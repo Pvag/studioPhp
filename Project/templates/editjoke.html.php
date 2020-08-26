@@ -5,7 +5,11 @@
         <br>
         <input type="hidden" name="joke[id]" value="<?= $id ?? '' ?>">
         <?php foreach ($categories as $category) : ?>
-            <input type="checkbox" name="category[]" value="<?= $category->id ?>">
+            <?php if ($joke && $joke->hasCategory($category->id)) : ?>
+                <input type="checkbox" checked name="category[]" value="<?= $category->id ?>">
+            <?php else : ?>
+                <input type="checkbox" name="category[]" value="<?= $category->id ?>">
+            <?php endif; ?>
             <label><?= $category->name ?></label>
         <?php endforeach; ?>
         <input type="submit" value="Save">

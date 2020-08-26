@@ -76,7 +76,8 @@ class Joke
                 'joketext' => $joke->joketext ?? null,
                 'authorid' => $joke->authorid ?? null,
                 'userid' => $this->authentication->getUser()->id ?? null,
-                'categories' => $categories // TODO add already selected categories
+                'categories' => $categories, // TODO add already selected categories
+                'joke' => $joke
             ]
         ];
         return $values;
@@ -92,9 +93,10 @@ class Joke
         if ($joke['id'] == '' || $user->id == $oldPost->authorid) {
             $joke['jokedate'] = new \DateTime();
             $entity = $user->addJoke($joke);
+            $entity->clearCategories();
             $categories = $_POST['category'];
-            foreach ($categories as $category) {
-                $entity->addCategory($category);
+            foreach ($categories as $categoryId) {
+                $entity->addCategory($categoryId);
             }
             header('location: /joke/list');
         } else {

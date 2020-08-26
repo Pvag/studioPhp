@@ -68,7 +68,7 @@ class DatabaseTable
         $this->query($sql, $params);
     }
 
-    public function insert($params)
+    private function insert($params)
     {
         $sql = 'INSERT INTO ' . $this->table . ' SET ';
         foreach ($params as $key => $value) {
@@ -94,6 +94,13 @@ class DatabaseTable
         $params = ['value' => $value];
         $result = $this->query($sql, $params);
         return $result->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorParams);
+    }
+
+    public function deleteWhere($columnName, $value)
+    {
+        $sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $columnName . ' = :value';
+        $params = ['value' => $value];
+        $this->query($sql, $params);
     }
 
     private function update($params)

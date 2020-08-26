@@ -26,11 +26,27 @@ class Joke
         return $this->author;
     }
 
-    public function addCategory($category)
+    public function addCategory($categoryId)
     {
-        $this->jokesCategoriesTable->insert([
+        $this->jokesCategoriesTable->save([
             'jokeId' => $this->id,
-            'categoryId' => $category
+            'categoryId' => $categoryId
         ]);
+    }
+
+    public function hasCategory($categoryId)
+    {
+        $jokeCategories = $this->jokesCategoriesTable->find('jokeId', $this->id);
+        foreach ($jokeCategories as $jokeCategory) {
+            if ($jokeCategory->categoryId == $categoryId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function clearCategories()
+    {
+        $this->jokesCategoriesTable->deleteWhere('jokeId', $this->id);
     }
 }
